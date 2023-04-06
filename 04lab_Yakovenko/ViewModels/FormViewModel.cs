@@ -55,6 +55,7 @@ namespace KMA.Lab04.Yakovenko.ViewModels
                 return _proceedCommand ??= new RelayCommand<object>(_ => Proceed(), CanExecute);
             }
         }
+
         public FormViewModel(Action usersView)
         {
             this.usersView = usersView;
@@ -66,23 +67,21 @@ namespace KMA.Lab04.Yakovenko.ViewModels
         }
         internal async void Proceed()
         {
-
             IsEnabled = false;
-            Person p = new Person(Name, Surname, Email, DateOfBirth);
-            if (string.IsNullOrEmpty(p.Name) || string.IsNullOrEmpty(p.Surname) || string.IsNullOrEmpty(p.Email))
-            {
-                IsEnabled = true;
-                return;
-            }
             try
             {
-                await Task.Run(() =>
+                await Task.Run( () =>
                 {
-                    Thread.Sleep(1000);
-                    MessageBox.Show($"First name: {Name} \nLast name: {Surname} \nEmail: {Email} \nDate of birth: {DateOfBirth.ToShortDateString()}" +
-                        $"\nIs adult: {p.IsAdult} \nSun sign: {p.SunSign} \nChinese sign: {p.ChineseSign} \nIs birthday: {p.IsBirthday}");
+                    Person p = new Person(Name, Surname, Email, DateOfBirth);
+                    if (string.IsNullOrEmpty(p.Name) || string.IsNullOrEmpty(p.Surname) || string.IsNullOrEmpty(p.Email))
+                    {
+                        IsEnabled = true;
+                        return;
+                    }
+                    AddPerson addPerson  = new AddPerson();
+                    addPerson.Add(p);
                 });
-
+                usersView.Invoke();
             }
             catch (Exception ex)
             {

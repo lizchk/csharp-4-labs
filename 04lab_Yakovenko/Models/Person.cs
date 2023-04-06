@@ -9,7 +9,6 @@ namespace KMA.Lab04.Yakovenko.Models
         private string _name;
         private string _surname;
         private string _email;
-        private DateTime _dateOfBirth = DateTime.Today;
 
         public Person(string name, string surname, string email, DateTime dateOfBirth)
         {
@@ -42,7 +41,7 @@ namespace KMA.Lab04.Yakovenko.Models
             _name = name;
             _surname = surname;
             _email = email;
-            _dateOfBirth = dateOfBirth;
+            DateOfBirth = dateOfBirth;
             isAdult = CalcAge(DateOfBirth) >= 18;
             sunSign = CalcWestSign();
             chineseSign = CalcChinSign();
@@ -57,11 +56,7 @@ namespace KMA.Lab04.Yakovenko.Models
 
         }
 
-        public DateTime DateOfBirth
-        {
-            get { return _dateOfBirth; }
-            private set { _dateOfBirth = value; }
-        }
+        public DateTime DateOfBirth { get; private set; } = DateTime.Today;
 
         public string Name
         {
