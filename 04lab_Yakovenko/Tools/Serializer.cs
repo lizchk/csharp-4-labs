@@ -2,13 +2,8 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Runtime.ExceptionServices;
-using System.Text;
 using System.Text.Json;
-using System.Text.Json.Serialization;
 using System.Threading.Tasks;
-using System.Threading.Tasks.Dataflow;
 
 namespace KMA.Lab04.Yakovenko.Tools
 {
@@ -52,6 +47,7 @@ namespace KMA.Lab04.Yakovenko.Tools
             }
             return JsonSerializer.Deserialize<Person>(personObj);
         }
+
         public Serializer()
         {
             if (!Directory.Exists(_dateBase))

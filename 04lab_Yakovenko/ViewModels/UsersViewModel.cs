@@ -5,6 +5,8 @@ using System.Collections.ObjectModel;
 using KMA.Lab04.Yakovenko.Models;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
+using System.IO;
+using System.Windows;
 
 namespace KMA.Lab04.Yakovenko.ViewModels
 {
@@ -12,8 +14,11 @@ namespace KMA.Lab04.Yakovenko.ViewModels
     {
         private Action formView;
         private RelayCommand<object> _openFormViewCommand;
+        private RelayCommand<object> _deletePersonCommand;
         private ObservableCollection<Person> _collection;
         private Serializer serializer= new Serializer();
+        private static string _dateBase = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "Lab04Users");
+        
 
         public UsersViewModel(Action formView)
         {
@@ -30,6 +35,28 @@ namespace KMA.Lab04.Yakovenko.ViewModels
         public void OpenFormView()
         {
             formView?.Invoke();
+        }
+        public RelayCommand<object> DeletePersonCommand
+        {
+            get
+            {
+                return _deletePersonCommand ??= new RelayCommand<object>(_ => DeletePerson());
+            }
+        }
+        public void DeletePerson()
+        {
+            string file = Path.Combine(_dateBase, SelectedPerson.Surname);
+            if (!File.Exists(file))
+            {
+                return;
+            }
+            File.Delete(file);
+            Collection = new ObservableCollection<Person> (serializer.ShowPersons());
+        }
+
+        public Person SelectedPerson
+        {
+            get; set;
         }
 
         public ObservableCollection<Person> Collection
