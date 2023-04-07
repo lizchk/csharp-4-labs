@@ -24,6 +24,34 @@ namespace KMA.Lab04.Yakovenko.Tools
                 await s.WriteAsync(personObj);
             }
         }
+        public List<Person> ShowPersons()
+        {
+            List<Person> persons = new List<Person>();
+            foreach (String file in Directory.EnumerateFiles(_dateBase))
+            {
+                string personObj = "";
+                using (StreamReader r = new StreamReader(file))
+                {
+                    personObj = r.ReadToEnd();
+                }
+                persons.Add(JsonSerializer.Deserialize<Person>(personObj));
+            }
+            return persons;
+        }
+        public async Task<Person> ShowPerson(String Surname)
+        {
+            string file = Path.Combine(_dateBase, Surname);
+            if (!File.Exists(file))
+            {
+                return null;
+            }
+            string personObj = "";
+            using (StreamReader r = new StreamReader(file))
+            {
+                personObj = await r.ReadToEndAsync();
+            }
+            return JsonSerializer.Deserialize<Person>(personObj);
+        }
         public Serializer()
         {
             if (!Directory.Exists(_dateBase))

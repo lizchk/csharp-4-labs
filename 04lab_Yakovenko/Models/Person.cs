@@ -9,6 +9,8 @@ namespace KMA.Lab04.Yakovenko.Models
         private string _name;
         private string _surname;
         private string _email;
+        private bool isAdult;
+        private bool isBirthday;
 
         public Person(string name, string surname, string email, DateTime dateOfBirth)
         {
@@ -47,14 +49,6 @@ namespace KMA.Lab04.Yakovenko.Models
             chineseSign = CalcChinSign();
             isBirthday = CalcBirth();
         }
-        public Person(string name, string surname, string email) : this(name, surname, email, default)
-        {
-
-        }
-        public Person(string name, string surname, DateTime dateOfBirth) : this(name, surname, null, dateOfBirth)
-        {
-
-        }
 
         public DateTime DateOfBirth { get; private set; } = DateTime.Today;
 
@@ -90,7 +84,7 @@ namespace KMA.Lab04.Yakovenko.Models
             get { return isBirthday; }
         }
 
-        private bool isAdult;
+        
         private int CalcAge(DateTime dateOfBirth)
         {
             int age = DateTime.Now.Year - dateOfBirth.Year;
@@ -100,7 +94,7 @@ namespace KMA.Lab04.Yakovenko.Models
             }
             return age;
         }
-        private bool isBirthday;
+        
         private bool CalcBirth()
         {
             if (DateTime.Now.Day == DateOfBirth.Day && DateTime.Now.Month == DateOfBirth.Month)

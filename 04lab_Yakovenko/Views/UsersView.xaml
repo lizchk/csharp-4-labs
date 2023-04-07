@@ -7,16 +7,16 @@
              d:DesignHeight="700" d:DesignWidth="1000">
 
     <Grid>
-        <DataGrid>
+        <DataGrid ItemsSource="{Binding Collection}">
             <DataGrid.Columns>
-                <DataGridTextColumn Header="        First name" FontSize="5" Width="125"/>
-                <DataGridTextColumn Header="          Last name" Width="125"  />
-                <DataGridTextColumn Header="       Date of birth" Width="125"/>
-                <DataGridTextColumn Header="              Email" Width="125"/>
-                <DataGridTextColumn Header="           Sun sign" Width="125"/>
-                <DataGridTextColumn Header="       Chinese sign" Width="125"/>
-                <DataGridTextColumn Header="        Is adult(T/F)" Width="125"/>
-                <DataGridTextColumn Header="      Is birthday(T/F)" Width="125"/>
+                <DataGridTextColumn Header="        First name" Width="125" Binding="{Binding Name}"/>
+                <DataGridTextColumn Header="          Last name" Width="125" Binding="{Binding Surname}"/>
+                <DataGridTextColumn Header="       Date of birth" Width="125" Binding="{Binding DateOfBirth}"/>
+                <DataGridTextColumn Header="              Email" Width="125" Binding="{Binding Email}"/>
+                <DataGridTextColumn Header="           Sun sign" Width="125" Binding="{Binding SunSign}"/>
+                <DataGridTextColumn Header="       Chinese sign" Width="125" Binding="{Binding ChineseSign}"/>
+                <DataGridTextColumn Header="        Is adult(T/F)" Width="125" Binding="{Binding IsAdult}"/>
+                <DataGridTextColumn Header="      Is birthday(T/F)" Width="125" Binding="{Binding IsBirthday}"/>
 
             </DataGrid.Columns>
         </DataGrid>

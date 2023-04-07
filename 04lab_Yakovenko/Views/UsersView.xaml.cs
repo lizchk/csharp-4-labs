@@ -26,9 +26,5 @@ namespace KMA.Lab04.Yakovenko.Views
             DataContext = _viewModel = new UsersViewModel(openFormView);
         }
 
-        private void Button_Click(object sender, RoutedEventArgs e)
-        {
-
-        }
     }
 }

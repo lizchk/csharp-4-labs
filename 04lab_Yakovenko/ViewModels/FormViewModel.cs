@@ -15,7 +15,7 @@ namespace KMA.Lab04.Yakovenko.ViewModels
         private RelayCommand<object> _proceedCommand;
         private bool _isEnabled = true;
         private Action usersView;
-       
+        
         public DateTime DateOfBirth
         {
             get;
