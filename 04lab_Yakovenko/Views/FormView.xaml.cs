@@ -14,3 +14,4 @@ namespace KMA.Lab04.Yakovenko.Views
         }
     }
 }
+

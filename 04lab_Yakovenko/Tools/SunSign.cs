@@ -13,6 +13,7 @@
         Sagittarius,
         Capricorn,
         Aquarius,
-        Pisces
+        Pisces,
+        All
     }
 }

@@ -1,7 +1,8 @@
 ﻿using KMA.Lab04.Yakovenko.ViewModels;
 using System;
-using System.Windows;
 using System.Windows.Controls;
+using KMA.Lab04.Yakovenko.Models;
+using KMA.Lab04.Yakovenko.Tools;
 
 namespace KMA.Lab04.Yakovenko.Views
 {
@@ -14,12 +15,25 @@ namespace KMA.Lab04.Yakovenko.Views
             InitializeComponent();
             DataContext = _viewModel = new UsersViewModel(openFormView);
         }
-   
 
-        private void Button_Click(object sender, RoutedEventArgs e)
+        private async void EditUser(object sender, DataGridCellEditEndingEventArgs e)
         {
+            var editedPerson = e.EditingElement.DataContext as Person;
 
+            await Serializer.AddPerson(editedPerson);
         }
 
+        private void DataGrid_OnPreparingCellForEdit(object? sender, DataGridPreparingCellForEditEventArgs e)
+        {
+            Serializer.DeletePerson(e.EditingElement.DataContext as Person);
+        }
     }
 }
+
+
+
+
+
+
+
+

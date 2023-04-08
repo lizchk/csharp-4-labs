@@ -13,6 +13,7 @@
         Dragon,
         Snake,
         Horse,
-        Goat
+        Goat,
+        All
     }
 }

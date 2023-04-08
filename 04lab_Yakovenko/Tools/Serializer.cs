@@ -10,19 +10,23 @@ namespace KMA.Lab04.Yakovenko.Tools
     internal class Serializer
     {
 
-        private static string _dateBase = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "Lab04Users");
-        public async Task SerializePerson(Person obj)
+        public static string DbPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "Lab04Users");
+        public static async Task AddPerson(Person obj)
         {
-            String personObj = JsonSerializer.Serialize(obj);
-            using (StreamWriter s = new StreamWriter(Path.Combine(_dateBase, obj.Surname), false))
-            {
-                await s.WriteAsync(personObj);
-            }
+            var personObj = JsonSerializer.Serialize(obj);
+            using StreamWriter s = new StreamWriter(Path.Combine(DbPath, obj.Surname), false);
+
+            await s.WriteAsync(personObj);
+        }
+
+        public static void DeletePerson(Person obj)
+        {
+            File.Delete(Path.Combine(DbPath, obj.Surname));
         }
         public List<Person> ShowPersons()
         {
             List<Person> persons = new List<Person>();
-            foreach (String file in Directory.EnumerateFiles(_dateBase))
+            foreach (String file in Directory.EnumerateFiles(DbPath))
             {
                 string personObj = "";
                 using (StreamReader r = new StreamReader(file))
@@ -35,7 +39,7 @@ namespace KMA.Lab04.Yakovenko.Tools
         }
         public async Task<Person> ShowPerson(String Surname)
         {
-            string file = Path.Combine(_dateBase, Surname);
+            string file = Path.Combine(DbPath, Surname);
             if (!File.Exists(file))
             {
                 return null;
@@ -50,9 +54,9 @@ namespace KMA.Lab04.Yakovenko.Tools
 
         public Serializer()
         {
-            if (!Directory.Exists(_dateBase))
+            if (!Directory.Exists(DbPath))
             {
-                Directory.CreateDirectory(_dateBase);
+                Directory.CreateDirectory(DbPath);
             }
         }
     }

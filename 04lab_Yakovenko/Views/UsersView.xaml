@@ -1,34 +1,64 @@
 ﻿<UserControl x:Class="KMA.Lab04.Yakovenko.Views.UsersView"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
-             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-             mc:Ignorable="d" 
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:local="clr-namespace:KMA.Lab04.Yakovenko.Tools"
+             xmlns:System="clr-namespace:System;assembly=System.Runtime"
+             mc:Ignorable="d"
              d:DesignHeight="700" d:DesignWidth="1000">
+    <UserControl.Resources>
+        <ObjectDataProvider MethodName="GetValues" ObjectType="{x:Type System:Enum}" x:Key="SunSignValues">
+            <ObjectDataProvider.MethodParameters>
+                <x:Type TypeName="local:SunSign" />
+            </ObjectDataProvider.MethodParameters>
+        </ObjectDataProvider>
+        <ObjectDataProvider MethodName="GetValues" ObjectType="{x:Type System:Enum}" x:Key="ChineseSignValues">
+            <ObjectDataProvider.MethodParameters>
+                <x:Type TypeName="local:ChineseSign" />
+            </ObjectDataProvider.MethodParameters>
+        </ObjectDataProvider>
+    </UserControl.Resources>
+    <ScrollViewer>
+        <StackPanel>
+            <StackPanel Orientation="Horizontal">
+                <ComboBox Width="125" Margin="5"
+                      ItemsSource="{Binding Source={StaticResource SunSignValues}}"
+                      SelectedItem="{Binding Path=SelectedSunSign, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                <ComboBox Width="125" Margin="5"
+                      ItemsSource="{Binding Source={StaticResource ChineseSignValues}}"
+                      SelectedItem="{Binding Path=SelectedChineseSign, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+            </StackPanel>
+            <Button Content="Add" FontSize="20" FontFamily="Georgia" FontWeight="Medium" BorderBrush="DeepSkyBlue"
+                Background="LightSkyBlue" BorderThickness="3" Width="150" Height="50" HorizontalAlignment="Right"
+                VerticalAlignment="Top" Command="{Binding OpenFormViewCommand}" />
+            <DataGrid
+            ItemsSource="{Binding People}"
+            SelectedItem="{Binding Path=SelectedPerson, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+            AutoGenerateColumns="False"
+            CellEditEnding="EditUser"
+            PreparingCellForEdit="DataGrid_OnPreparingCellForEdit">
+                <DataGrid.Columns>
+                    <DataGridTextColumn Header="        First name" Width="125"
+                                    Binding="{Binding Name, UpdateSourceTrigger=PropertyChanged}" />
+                    <DataGridTextColumn Header="          Last name" Width="125"
+                                    Binding="{Binding Surname, UpdateSourceTrigger=PropertyChanged}" />
+                    <DataGridTextColumn Header="       Date of birth" Width="125"
+                                    Binding="{Binding DateOfBirth, UpdateSourceTrigger=PropertyChanged}" />
+                    <DataGridTextColumn Header="              Email" Width="125"
+                                    Binding="{Binding Email, UpdateSourceTrigger=PropertyChanged}" />
+                    <DataGridTextColumn Header="           Sun sign" Width="125"
+                                    Binding="{Binding SunSign, UpdateSourceTrigger=PropertyChanged}" />
+                    <DataGridTextColumn Header="       Chinese sign" Width="125"
+                                    Binding="{Binding ChineseSign, UpdateSourceTrigger=PropertyChanged}" />
+                    <DataGridTextColumn Header="        Is adult(T/F)" Width="125"
+                                    Binding="{Binding IsAdult, UpdateSourceTrigger=PropertyChanged}" />
+                    <DataGridTextColumn Header="      Is birthday(T/F)" Width="125"
+                                    Binding="{Binding IsBirthday, UpdateSourceTrigger=PropertyChanged}" />
+                </DataGrid.Columns>
+            </DataGrid>
+        </StackPanel>
+    </ScrollViewer>
 
-    <Grid>
-        <DataGrid ItemsSource="{Binding Collection}" SelectedItem="{Binding Path=SelectedPerson, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
-            <DataGrid.Columns>
-                <DataGridTextColumn Header="        First name" Width="125" Binding="{Binding Name}"/>
-                <DataGridTextColumn Header="          Last name" Width="125" Binding="{Binding Surname}"/>
-                <DataGridTextColumn Header="       Date of birth" Width="125" Binding="{Binding DateOfBirth}"/>
-                <DataGridTextColumn Header="              Email" Width="125" Binding="{Binding Email}"/>
-                <DataGridTextColumn Header="           Sun sign" Width="125" Binding="{Binding SunSign}"/>
-                <DataGridTextColumn Header="       Chinese sign" Width="125" Binding="{Binding ChineseSign}"/>
-                <DataGridTextColumn Header="        Is adult(T/F)" Width="125" Binding="{Binding IsAdult}"/>
-                <DataGridTextColumn Header="      Is birthday(T/F)" Width="125" Binding="{Binding IsBirthday}"/>
-
-            </DataGrid.Columns>
-        </DataGrid>
-        <Button Content="Add" FontSize="20" FontFamily="Georgia" FontWeight="Medium" BorderBrush="DeepSkyBlue"
-                Background="LightSkyBlue" BorderThickness="3" Width="150" Height="50"  HorizontalAlignment="Left" 
-                VerticalAlignment="Top" Margin="403,597,0,0" Command="{Binding OpenFormViewCommand}" Click="Button_Click"/>
-        <Button Content="Edit" FontSize="20" FontFamily="Georgia" FontWeight="Medium" BorderBrush="DeepSkyBlue"
-                Background="LightSkyBlue" BorderThickness="3" Width="150" Height="50"  HorizontalAlignment="Left" 
-                VerticalAlignment="Top" Margin="227,597,0,0" />
-        <Button Content="Delete" FontSize="20" FontFamily="Georgia" FontWeight="Medium" BorderBrush="DeepSkyBlue"
-                Background="LightSkyBlue" BorderThickness="3" Width="150" Height="50"  HorizontalAlignment="Left" 
-                VerticalAlignment="Top" Margin="580,597,0,0" Command="{Binding DeletePersonCommand}"/>
-    </Grid>
 
 </UserControl>

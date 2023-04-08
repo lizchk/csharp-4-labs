@@ -1,35 +1,30 @@
 ﻿using KMA.Lab04.Yakovenko.Tools;
 using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Runtime.CompilerServices;
 using System.Windows;
 
 namespace KMA.Lab04.Yakovenko.Models
 {
-    internal class Person
+    internal class Person : INotifyPropertyChanged
     {
-        private string _name;
-        private string _surname;
-        private string _email;
-        private bool isAdult;
-        private bool isBirthday;
-
         public Person(string name, string surname, string email, DateTime dateOfBirth)
         {
             try
             {
-                if (ExcFutureDate(CalcAge(dateOfBirth)) == true)
-                {
+                if (ExcFutureDate(CalcAge(dateOfBirth)))
                     throw new ExcFutureDate();
-                }
-                if (ExcPastDate(CalcAge(dateOfBirth)) == true)
-                {
+
+                if (ExcPastDate(CalcAge(dateOfBirth)))
                     throw new ExcPastDate();
-                }
             }
             catch (Exception ex)
             {
                 MessageBox.Show(ex.Message);
                 return;
             }
+
             try
             {
                 EmailExceptions(email);
@@ -40,143 +35,104 @@ namespace KMA.Lab04.Yakovenko.Models
                 return;
             }
 
-            _name = name;
-            _surname = surname;
-            _email = email;
+            Name = name;
+            Surname = surname;
+            Email = email;
             DateOfBirth = dateOfBirth;
-            isAdult = CalcAge(DateOfBirth) >= 18;
-            sunSign = CalcWestSign();
-            chineseSign = CalcChinSign();
-            isBirthday = CalcBirth();
         }
 
-        public DateTime DateOfBirth { get; private set; } = DateTime.Today;
+        private DateTime _dateOfBirth;
 
-        public string Name
+        public DateTime DateOfBirth
         {
-            get { return _name; }
-            private set { _name = value; }
-        }
-        public string Surname
-        {
-            get { return _surname; }
-            private set { _surname = value; }
-        }
-        public string Email
-        {
-            get { return _email; }
-            private set { _email = value; }
-        }
-        public bool IsAdult
-        {
-            get { return isAdult; }
-        }
-        public SunSign SunSign
-        {
-            get { return sunSign; }
-        }
-        public ChineseSign ChineseSign
-        {
-            get { return chineseSign; }
-        }
-        public bool IsBirthday
-        {
-            get { return isBirthday; }
+            get => _dateOfBirth;
+            set
+            {
+                _dateOfBirth = value;
+                IsAdult = CalcAge(_dateOfBirth) >= 18;
+                SunSign = CalcWestSign();
+                ChineseSign = CalcChinSign();
+                IsBirthday = CalcBirth();
+                OnPropertyChanged(nameof(IsAdult));
+                OnPropertyChanged(nameof(SunSign));
+                OnPropertyChanged(nameof(ChineseSign));
+                OnPropertyChanged(nameof(IsBirthday));
+            }
         }
 
-        
+        public string Name { get; set; }
+        public string Surname { get; set; }
+        public string Email { get; set; }
+        public bool IsAdult { get; set; }
+        public SunSign SunSign { get; set; }
+        public ChineseSign ChineseSign { get; set; }
+        public bool IsBirthday { get; set; }
+
         private int CalcAge(DateTime dateOfBirth)
         {
             int age = DateTime.Now.Year - dateOfBirth.Year;
-            if (DateTime.Now.Month < dateOfBirth.Month || DateTime.Now.Month == dateOfBirth.Month && DateTime.Now.Day < dateOfBirth.Day)
+            if (DateTime.Now.Month < dateOfBirth.Month ||
+                DateTime.Now.Month == dateOfBirth.Month && DateTime.Now.Day < dateOfBirth.Day)
             {
                 age--;
             }
+
             return age;
         }
-        
+
         private bool CalcBirth()
-        {
-            if (DateTime.Now.Day == DateOfBirth.Day && DateTime.Now.Month == DateOfBirth.Month)
-            {
-                MessageBox.Show("Happy birthday!💖");
-                return true;
-            }
-            return false;
+            => DateTime.Now.Day == DateOfBirth.Day && DateTime.Now.Month == DateOfBirth.Month;
 
-        }
-
-        private ChineseSign chineseSign;
         private ChineseSign CalcChinSign()
-        {
-            return (ChineseSign)(DateOfBirth.Year % 12);
-        }
+            => (ChineseSign)(DateOfBirth.Year % 12);
 
-        private SunSign sunSign;
         private SunSign CalcWestSign()
         {
+            var month = DateOfBirth.Month;
+            var day = DateOfBirth.Day;
 
-            int month = DateOfBirth.Month;
-            int day = DateOfBirth.Day;
-
-            switch (month)
+            return month switch
             {
-                case 1:
-                    return day <= 19 ? SunSign.Capricorn : SunSign.Aquarius;
-                case 2:
-                    return day <= 18 ? SunSign.Aquarius : SunSign.Pisces;
-                case 3:
-                    return day <= 20 ? SunSign.Pisces : SunSign.Aries;
-                case 4:
-                    return day <= 19 ? SunSign.Aries : SunSign.Taurus;
-                case 5:
-                    return day <= 20 ? SunSign.Taurus : SunSign.Gemini;
-                case 6:
-                    return day <= 20 ? SunSign.Gemini : SunSign.Cancer;
-                case 7:
-                    return day <= 22 ? SunSign.Cancer : SunSign.Leo;
-                case 8:
-                    return day <= 22 ? SunSign.Leo : SunSign.Virgo;
-                case 9:
-                    return day <= 22 ? SunSign.Virgo : SunSign.Libra;
-                case 10:
-                    return day <= 22 ? SunSign.Libra : SunSign.Scorpio;
-                case 11:
-                    return day <= 21 ? SunSign.Scorpio : SunSign.Sagittarius;
-                default:
-                    return day <= 21 ? SunSign.Sagittarius : SunSign.Capricorn;
-            }
+                1 => day <= 19 ? SunSign.Capricorn : SunSign.Aquarius,
+                2 => day <= 18 ? SunSign.Aquarius : SunSign.Pisces,
+                3 => day <= 20 ? SunSign.Pisces : SunSign.Aries,
+                4 => day <= 19 ? SunSign.Aries : SunSign.Taurus,
+                5 => day <= 20 ? SunSign.Taurus : SunSign.Gemini,
+                6 => day <= 20 ? SunSign.Gemini : SunSign.Cancer,
+                7 => day <= 22 ? SunSign.Cancer : SunSign.Leo,
+                8 => day <= 22 ? SunSign.Leo : SunSign.Virgo,
+                9 => day <= 22 ? SunSign.Virgo : SunSign.Libra,
+                10 => day <= 22 ? SunSign.Libra : SunSign.Scorpio,
+                11 => day <= 21 ? SunSign.Scorpio : SunSign.Sagittarius,
+                _ => day <= 21 ? SunSign.Sagittarius : SunSign.Capricorn
+            };
         }
 
         private bool ExcPastDate(int age)
-        {
-            if (age <= 135)
-            {
-                return false;
-            }
-            return true;
-        }
-        private bool ExcFutureDate(int age)
-        {
-            if (age >= 0)
-            {
-                return false;
-            }
-            return true;
-        }
+            => age > 135;
 
-        private bool ExcEmail(string email)
-        {
-            bool excEmail;
-            excEmail = email.Contains('@');
-            return excEmail;
-        }
+        private bool ExcFutureDate(int age)
+            => age < 0;
+
         private void EmailExceptions(string email)
         {
-            if (ExcEmail(email) == false)
-            {
+            if (!email.Contains('@'))
                 throw new ExcEmail();
-            }
+        }
+
+        public event PropertyChangedEventHandler? PropertyChanged;
+
+        protected virtual void OnPropertyChanged([CallerMemberName] string? propertyName = null)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
+
+        protected bool SetField<T>(ref T field, T value, [CallerMemberName] string? propertyName = null)
+        {
+            if (EqualityComparer<T>.Default.Equals(field, value)) return false;
+            field = value;
+            OnPropertyChanged(propertyName);
+            return true;
         }
     }
 }
